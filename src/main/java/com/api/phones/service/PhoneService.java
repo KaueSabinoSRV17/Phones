@@ -19,7 +19,7 @@ public class PhoneService {
 
     public Optional<Phone> findPhoneById(String id) {
         Optional<Phone> response = repository.findById(Integer.parseInt(id));
-        return response.isPresent() ? response : Optional;
+        return response.isPresent() ? response : Optional.empty();
     }
 
     public Phone savePhoneOnDataBase(Phone phone) {

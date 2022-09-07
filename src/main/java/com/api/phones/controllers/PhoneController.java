@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.phones.service.PhoneService;
+import com.api.utils.StringUtils;
 import com.api.phones.model.Phone;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,11 @@ public class PhoneController {
 
     @GetMapping("/")
     public String home() {
-        return "<h1>Home do site - Live Reload Funcionando!</h1>";
+        StringBuilder lista = new StringBuilder("<ul>");
+        String title = StringUtils.htmlElement("h1", "Welcome to the Phone API!");
+        lista.append(StringUtils.htmlElement("li", "/phones: Returns all the phones"));
+        lista.append(StringUtils.htmlElement("li", "/phone/{id}: Returns a phone by ID"));
+        return title + lista;
     }
     @GetMapping("/phones")
     public List<Phone> listOfPhones() {
