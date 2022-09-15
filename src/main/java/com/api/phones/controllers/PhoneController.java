@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.phones.dto.PhoneDTO;
 import com.api.phones.model.Phone;
-import com.api.phones.repository.PhoneRepository;
 import com.api.phones.service.PhoneService;
 
 
