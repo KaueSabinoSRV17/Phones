@@ -1,10 +1,7 @@
 package com.api.phones.controllers;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +32,9 @@ public class PhoneController {
 
     @GetMapping
     public ResponseEntity<Page<Phone>> listOfPhones(Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAllPhones(pageable));
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(service.findAllPhones(pageable));
     }
 
     @GetMapping("/{id}")
@@ -48,34 +47,20 @@ public class PhoneController {
 
     @PostMapping
     public ResponseEntity<?> saveNewPhone(@RequestBody @Valid PhoneDTO phone) {
-        if (service.existsByName(phone.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: We Already Have a Phone with that NAME.");
-        }
-        var newPhone = new Phone(phone);
-        Optional<Phone> savedPhone = service.savePhoneOnDataBase(newPhone);
-        return savedPhone
+        return service.savePhoneOnDataBase(new Phone(phone))
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.internalServerError().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Phone> deletePhone(@PathVariable("id") Integer id) {
-        Optional<Phone> deletedPhone = service.delete(id);
-        return deletedPhone
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> deletePhone(@PathVariable("id") Integer id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePhone(@RequestBody @Valid PhoneDTO phone, @PathVariable("id") Integer id) {
-        Optional<Phone> phoneToBeUpdated = service.findPhoneById(id);
-        if (phoneToBeUpdated.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: We Dont have that phone yet. You should just save it!");
-        }
-        var updatedPhone = new Phone();
-        BeanUtils.copyProperties(phone, updatedPhone);
-        updatedPhone.setId(phoneToBeUpdated.get().getId());
-        return service.savePhoneOnDataBase(updatedPhone)
+    public ResponseEntity<?> updatePhone(@RequestBody @Valid PhoneDTO phone, @PathVariable Integer id) {        
+        return service.updatePhoneOnDataBase(new Phone(phone), id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.internalServerError().build());
     }

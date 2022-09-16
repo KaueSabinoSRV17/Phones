@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.api.phones.dto.PhoneDTO;
+import com.api.phones.exceptions.DomainException;
 import com.api.phones.model.Phone;
 import com.api.phones.repository.PhoneRepository;
 
@@ -25,23 +27,36 @@ public class PhoneService {
         return response.isPresent() ? response : Optional.empty();
     }
 
-    public Optional<Phone> savePhoneOnDataBase(Phone phone) {
-        repository.save(phone);
-        Optional<Phone> isItReallySaved = repository.findById(phone.getId());
-        return isItReallySaved.isPresent() ? isItReallySaved : Optional.empty();
+    public Optional<Phone> savePhoneOnDataBase(Phone newPhone) {
+        if (existsByName(newPhone.getName())) {
+            throw new DomainException("We Already Have a phone with that NAME!");
+        }
+        repository.save(newPhone);        
+        return repository.findById(newPhone.getId());
     }
 
-    public Optional<Phone> delete(Integer id) {
-        Optional<Phone> doestItActuallyExists = findPhoneById(id);
-        if (!doestItActuallyExists.isPresent()) {
-            return Optional.empty();
+    public void delete(Integer id) {
+        if (!existsById(id)) {
+            throw new DomainException("This Phone Does not Exists!");
         }
         repository.deleteById(id);
-        return doestItActuallyExists;
+    }
+
+    public Optional<Phone> updatePhoneOnDataBase(Phone phone, Integer id) {
+        boolean phoneExists = existsById(id);
+        if (!phoneExists) {
+            throw new DomainException("This Phone Does not Exists yet!");
+        }
+        phone.setId(id);
+        return savePhoneOnDataBase(phone);
     }
 
     public boolean existsByName(String name) {
         return repository.existsByName(name);
+    }
+
+    public boolean existsById(Integer id) {
+        return repository.existsById(id);
     }
 
 }
