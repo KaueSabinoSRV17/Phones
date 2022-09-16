@@ -1,6 +1,6 @@
 package com.api.phones.exceptions;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -40,10 +41,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var error = new Error(
             status.value(),
             "You may not have given the neceessary informations properly",
-            LocalDateTime.now(),
+            OffsetDateTime.now(),
             fields);
 
         return handleExceptionInternal(ex, error, headers, status, request);
     }
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<Object> handleDomainException(DomainException ex) {
+
+        var error = new Error(
+            HttpStatus.BAD_GATEWAY.value(),
+            ex.getMessage(),
+            OffsetDateTime.now()
+        );
+
+        return handleExceptionInternal(ex, error, null, null, null);
+    }
+
+
 
 }

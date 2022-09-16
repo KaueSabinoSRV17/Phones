@@ -1,6 +1,6 @@
 package com.api.phones.exceptions;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,8 +20,14 @@ public class Error {
 
     private Integer status;
     private String title;
-    private LocalDateTime timeStamp;
+    private OffsetDateTime timeStamp;
     private List<Field> fields;
+
+    public Error(Integer status, String message, OffsetDateTime timeStamp) {
+        this.status = status;
+        this.title = message;
+        this.timeStamp = timeStamp;
+    }
 
     @Getter
     @AllArgsConstructor
