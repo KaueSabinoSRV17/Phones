@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.api.phones.dto.PhoneDTO;
 import com.api.phones.exceptions.DomainException;
 import com.api.phones.model.Phone;
 import com.api.phones.repository.PhoneRepository;
