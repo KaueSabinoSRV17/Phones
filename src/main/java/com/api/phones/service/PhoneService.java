@@ -12,7 +12,10 @@ import com.api.phones.exceptions.DomainException;
 import com.api.phones.model.Phone;
 import com.api.phones.repository.PhoneRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class PhoneService {
 
     @Autowired
