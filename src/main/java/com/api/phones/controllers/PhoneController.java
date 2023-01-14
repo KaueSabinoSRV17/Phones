@@ -21,10 +21,13 @@ import com.api.phones.dto.PhoneDTO;
 import com.api.phones.model.Phone;
 import com.api.phones.service.PhoneService;
 
+import lombok.AllArgsConstructor;
+
 
 @RestController
 @RequestMapping("/phones")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@AllArgsConstructor
 public class PhoneController {
     
     @Autowired

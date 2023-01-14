@@ -13,8 +13,8 @@ import com.api.phones.repository.PhoneRepository;
 
 import lombok.AllArgsConstructor;
 
-@Service
 @AllArgsConstructor
+@Service
 public class PhoneService {
 
     @Autowired
